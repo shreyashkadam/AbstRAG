@@ -1,0 +1,36 @@
+services:
+  postgres_db:
+    image: ankane/pgvector
+    container_name: postgres_db
+    env_file:
+      - .env
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PWD}
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ['CMD-SHELL', "pg_isready -U postgres"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+      timeout: 5s
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: abstrag
+    env_file: .env
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    ports:
+      - "8501:8501"  # Expose the port for the Streamlit app
+      - "8500:8500"  # Expose the port for the Streamlit monitor
+    command: >
+      bash -c "
+      python init_db.py &&
+      python update_database.py &&
+      streamlit run streamlit_ui.py --server.port 8501 --server.address 0.0.0.0"
