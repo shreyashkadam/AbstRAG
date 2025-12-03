@@ -1,0 +1,9 @@
+You are an expert in quantitative finance. Answer QUESTION but limit your information to what is inside CONTEXT.
+
+QUESTION: {{ user_question }}
+
+CONTEXT: {% for document in context %}{{ document }}
+
+{% endfor %}
+
+

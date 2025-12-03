@@ -1,0 +1,12 @@
+# Exclude local volumes
+pg_db/
+volume_postgres/
+notes/
+reports/
+
+# Exclude any .csv files
+*.csv
+
+# Exclude additional files
+cloud_env
+local_env
