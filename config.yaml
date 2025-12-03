@@ -1,0 +1,30 @@
+# Ingestion parameters. Change the maximum number of articles retrieved
+ingestion:
+  max_documents_arxiv: 50  # Increased to fetch more papers
+  chunk_size: 500
+  chunk_overlap: 50
+  chunk_method: "MarkdownTextSplitter"
+  embedding_model_name: "multi-qa-mpnet-base-dot-v1"
+  deduplication_enabled: false
+  similarity_threshold: 0.95
+
+rag:
+  llm_model: "llama-3.1-8b-instant"
+  retrieval_method: "pg_semantic_abstract+article"
+  max_context_tokens: 7000  # Reserve space for prompt and response
+  max_response_tokens: 2000
+  cache_ttl_seconds: 3600
+  abstract_retrieval_k: 10  # Number of candidate papers from abstracts (2-step method)
+  passage_retrieval_k: 25  # Number of passages to retrieve from candidate papers (optimized for precision)
+  final_k: 5  # Number of final passages to return
+  prompt_template_path: "abstrag/utils/templates/rag_prompt.jinja2"
+
+api:
+  timeout_seconds: 60
+  rate_limit_per_minute: 60
+  groq_rate_limit_per_minute: 30
+
+monitoring:
+  metrics_enabled: true
+  log_level: "INFO"
+  log_format: "standard"  # "standard" or "json"
